@@ -1,0 +1,58 @@
+program {
+  DeterminarLaDirecciónDeLaPróximaCruzSiExiste()
+  while (not (seInformóQueNoHayCruz())) {
+    AvanzarEnLaDirecciónEncontrada()
+    DeterminarLaDirecciónDeLaPróximaCruzSiExiste()
+  }
+}
+
+procedure AvanzarEnLaDirecciónEncontrada() {
+  if     (seInformóQueHayCruzALaIzquierda()) { GirarALaIzquierda() } 
+  elseif (seInformóQueHayCruzALaDerecha())   { GirarALaDerecha()   } 
+  else {  }
+  AvanzarUnPaso()
+}
+
+procedure DeterminarLaDirecciónDeLaPróximaCruzSiExiste() {
+  BorrarInformes()
+  DeterminarSiHayCruzALaIzquierda()
+  if (not seInformóQueHayCruzALaIzquierda()) {
+    DeterminarSiHayCruzAdelante()
+    if (not seInformóQueHayCruzAdelante()) {
+      DeterminarSiHayCruzALaDerecha()
+      if (not seInformóQueHayCruzALaDerecha()) {
+        InformarNoHayCruz()
+      }
+    }
+  }
+}
+
+procedure DeterminarSiHayCruzALaIzquierda() {
+  GirarALaIzquierda()
+  AvanzarUnPaso()
+  if (hayCruzEnLaPosiciónActual()) { InformarHayCruzALaIzquierda() }
+  GirarALaIzquierda()
+  GirarALaIzquierda()
+  AvanzarUnPaso()
+  GirarALaIzquierda()
+}
+
+procedure DeterminarSiHayCruzAdelante() {
+  AvanzarUnPaso()
+  if (hayCruzEnLaPosiciónActual()) { InformarHayCruzAdelante() }
+  GirarALaIzquierda()
+  GirarALaIzquierda()
+  AvanzarUnPaso()
+  GirarALaIzquierda()
+  GirarALaIzquierda()
+}
+
+procedure DeterminarSiHayCruzALaDerecha() {
+  GirarALaDerecha()
+  AvanzarUnPaso()
+  if (hayCruzEnLaPosiciónActual()) { InformarHayCruzALaDerecha() }
+  GirarALaIzquierda()
+  GirarALaIzquierda()
+  AvanzarUnPaso()
+  GirarALaDerecha()
+}

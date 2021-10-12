@@ -1,0 +1,45 @@
+program {
+  movimientosEfectivosHastaAhora := []
+  while (not (direcciónDeLaPróximaCruz() == NoHayCruz)) {
+    direcciónAMover := direcciónDeLaPróximaCruz()
+    AvanzarUnPasoHacia(direcciónAMover)
+    movimientosEfectivosHastaAhora := movimientosEfectivosHastaAhora ++ [direcciónAMover]
+  }
+  return(movimientosEfectivosHastaAhora)
+}
+
+function direcciónDeLaPróximaCruz() {
+  return (choose Izquierda when (hayCruzHaciaLaIzquierda())
+                 Adelante  when (hayCruzHaciaAdelante())
+                 Derecha   when (hayCruzHaciaLaDerecha())
+                 NoHayCruz otherwise)
+}
+
+function hayCruzHaciaLaIzquierda() {
+  GirarALaIzquierda()
+  AvanzarUnPaso()
+  return (hayCruzEnLaPosiciónActual())
+}
+
+function hayCruzHaciaAdelante() {
+  AvanzarUnPaso()
+  return (hayCruzEnLaPosiciónActual())
+}
+
+function hayCruzHaciaLaDerecha() {
+  GirarALaDerecha()
+  AvanzarUnPaso()
+  return (hayCruzEnLaPosiciónActual())
+}
+
+procedure AvanzarUnPasoHacia(direcciónDeLaCruz) {
+  GirarHacia(direcciónDeLaCruz)
+  AvanzarUnPaso()
+}
+
+procedure GirarHacia(direcciónDeLaCruz) {
+  if     (direcciónDeLaCruz == Izquierda) { GirarALaIzquierda() } 
+  elseif (direcciónDeLaCruz == Derecha)   { GirarALaDerecha()   } 
+  elseif (direcciónDeLaCruz == Adelante)  {                     } 
+  else { BOOM("No puedo girar para apuntar a una cruz que no existe") }
+}

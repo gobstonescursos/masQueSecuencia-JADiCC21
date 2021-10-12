@@ -1,0 +1,98 @@
+type DirecciónPróximaCruz is variant {
+  case Izquierda {}
+  case Derecha   {}
+  case Adelante  {}
+  case NoHayCruz {}
+}
+
+/*@ATTRIBUTE@block_name@_@*/
+/*@ATTRIBUTE@block_dropdown@[("Izquierda", 'Izquierda'), ("Derecha", 'Derecha'), ("Adelante", 'Adelante'), ("No hay cruz", 'NoHayCruz')]@*/
+function idDir_(dir) {
+  return(dir)
+}
+
+procedure AvanzarUnPaso() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+      * el robot no está codificado en la celda destino
+  */
+  dirAMover := aux_direcciónActualDelRobot()
+  Aux_SacarRobot()
+  Mover(dirAMover)
+  Aux_PonerRobotAl_(dirAMover)
+}
+
+procedure GirarALaIzquierda() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+  */
+  dirActual := aux_direcciónActualDelRobot()
+  Aux_SacarRobot()
+  Aux_PonerRobotAl_(previo(dirActual))
+}
+
+procedure GirarALaDerecha() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+  */
+  dirActual := aux_direcciónActualDelRobot()
+  Aux_SacarRobot()
+  Aux_PonerRobotAl_(siguiente(dirActual))
+}
+
+function hayCruzEnLaPosiciónActual() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+  */
+  dirActual := aux_direcciónActualDelRobot()
+  return(hayBolitas(Rojo))
+}
+
+
+/* =====================================================
+    Auxiliares
+   =====================================================*/
+function aux_girar_Hacia_(dirActual,dirRelativa) {
+  /* PRECOND: dirRelativa NO es NoHayCruz */
+  return(matching (dirRelativa) select
+           previo(dirActual)    on Izquierda
+           dirActual            on Adelante
+           siguiente(dirActual) on Derecha
+           boom("No puedo avanzar si no hay cruz") otherwise)    
+}   
+
+function aux_direcciónActualDelRobot() {
+  /* PRECOND: el robot está codificado en la celda actual */
+  return(aux_decodificarDirDelRobot(nroBolitas(Negro)))
+}
+
+function aux_decodificarDirDelRobot(code) {
+  /* PRECOND: es un código válido de dirección */
+  return(matching (code) select 
+            Norte on 1
+            Este  on 2
+            Sur   on 3
+            Oeste on 4
+            boom("No hay un robot codificado") otherwise)
+}
+
+function aux_codificarDir(dir) {
+  return(matching (dir) select 
+            1 on Norte
+            2 on Este
+            3 on Sur
+            4 otherwise)
+}
+
+procedure Aux_SacarRobot() {
+  Aux_SacarTodas(Negro)
+}
+
+procedure Aux_SacarTodas(color) {
+  repeat(nroBolitas(color)) { Sacar(color) }
+}
+
+procedure Aux_PonerRobotAl_(dir) {
+  repeat(aux_codificarDir(dir)) { Poner(Negro) }
+}
+

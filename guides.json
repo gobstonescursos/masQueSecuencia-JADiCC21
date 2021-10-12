@@ -1,0 +1,18 @@
+[
+    { "name": "Ejemplos"                     , "repo": "gobstonescursos/masQueSecuencia-JADiCC21"
+    , "exercises": 
+      [ { "id": "1", "name": "Ejemplo 1"
+        , "path": "Ejemplos/Ejemplo 1"
+        }
+      , { "id": "1.1", "name": "Ejemplo 1 (operacional)"
+        , "path": "Ejemplos/Ejemplo 1 BIS"
+        }
+      , { "id": "2", "name": "Ejemplo 2"
+        , "path": "Ejemplos/Ejemplo 2"
+        }
+      , { "id": "3", "name": "Ejemplo 3"
+        , "path": "Ejemplos/Ejemplo 3"
+        }
+      ]
+    }
+]

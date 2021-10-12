@@ -1,0 +1,155 @@
+procedure BorrarInformes() {
+  Poner(Azul)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  Aux_SacarTodas(Verde)
+  Mover(Este) Aux_SacarTodas(Verde)
+  Mover(Este) Aux_SacarTodas(Verde)
+  Mover(Este) Aux_SacarTodas(Verde)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  while((puedeMover(Este) || puedeMover(Sur)) && not hayBolitas(Azul)) {
+    if(puedeMover(Este)) { Mover(Este) } else { IrAlBorde(Oeste); Mover(Sur) }
+  }
+  Sacar(Azul)  
+}
+
+procedure InformarHayCruzALaIzquierda() {
+  Poner(Azul)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  Poner(Verde)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  while((puedeMover(Este) || puedeMover(Sur)) && not hayBolitas(Azul)) {
+    if(puedeMover(Este)) { Mover(Este) } else { IrAlBorde(Oeste); Mover(Sur) }
+  }
+  Sacar(Azul)
+}
+
+procedure InformarHayCruzAdelante() {
+  Poner(Azul)
+  IrAlBorde(Norte) IrAlBorde(Oeste) Mover(Este)
+  Poner(Verde)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  while((puedeMover(Este) || puedeMover(Sur)) && not hayBolitas(Azul)) {
+    if(puedeMover(Este)) { Mover(Este) } else { IrAlBorde(Oeste); Mover(Sur) }
+  }
+  Sacar(Azul)
+}
+
+procedure InformarHayCruzALaDerecha() {
+  Poner(Azul)
+  IrAlBorde(Norte) IrAlBorde(Oeste) Mover(Este) Mover(Este)
+  Poner(Verde)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  while((puedeMover(Este) || puedeMover(Sur)) && not hayBolitas(Azul)) {
+    if(puedeMover(Este)) { Mover(Este) } else { IrAlBorde(Oeste); Mover(Sur) }
+  }
+  Sacar(Azul)
+}
+
+procedure InformarNoHayCruz() {
+  Poner(Azul)
+  IrAlBorde(Norte) IrAlBorde(Oeste) Mover(Este) Mover(Este) Mover(Este)
+  Poner(Verde)
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  while((puedeMover(Este) || puedeMover(Sur)) && not hayBolitas(Azul)) {
+    if(puedeMover(Este)) { Mover(Este) } else { IrAlBorde(Oeste); Mover(Sur) }
+  }
+  Sacar(Azul)
+}
+
+function seInformóQueHayCruzALaIzquierda() {
+  IrAlBorde(Norte) IrAlBorde(Oeste)
+  return(hayBolitas(Verde))
+}
+
+function seInformóQueHayCruzAdelante() {
+  IrAlBorde(Norte) IrAlBorde(Oeste) Mover(Este)
+  return(hayBolitas(Verde))
+}
+
+function seInformóQueHayCruzALaDerecha() {
+  IrAlBorde(Norte) IrAlBorde(Oeste) Mover(Este) Mover(Este)
+  return(hayBolitas(Verde))
+}
+
+function seInformóQueNoHayCruz() {
+  IrAlBorde(Norte) IrAlBorde(Oeste) Mover(Este) Mover(Este) Mover(Este)
+  return(hayBolitas(Verde))
+}
+
+procedure AvanzarUnPaso() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+      * el robot no está codificado en la celda destino
+  */
+  dirAMover := aux_direcciónActualDelRobot()
+  Aux_SacarRobot()
+  Mover(dirAMover)
+  Aux_PonerRobotAl_(dirAMover)
+}
+
+procedure GirarALaIzquierda() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+  */
+  dirActual := aux_direcciónActualDelRobot()
+  Aux_SacarRobot()
+  Aux_PonerRobotAl_(previo(dirActual))
+}
+
+procedure GirarALaDerecha() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+  */
+  dirActual := aux_direcciónActualDelRobot()
+  Aux_SacarRobot()
+  Aux_PonerRobotAl_(siguiente(dirActual))
+}
+
+function hayCruzEnLaPosiciónActual() {
+  /* PRECOND: 
+      * el robot está codificado en la celda actual
+  */
+  dirActual := aux_direcciónActualDelRobot()
+  return(hayBolitas(Rojo))
+}
+
+/* =====================================================
+    Auxiliares
+   =====================================================*/
+function aux_direcciónActualDelRobot() {
+  /* PRECOND: el robot está codificado en la celda actual */
+  return(aux_decodificarDirDelRobot(nroBolitas(Negro)))
+}
+
+function aux_decodificarDirDelRobot(code) {
+  /* PRECOND: es un código válido de dirección */
+  return(matching (code) select 
+            Norte on 1
+            Este  on 2
+            Sur   on 3
+            Oeste on 4
+            boom("No hay un robot codificado") otherwise)
+}
+
+function aux_codificarDir(dir) {
+  return(matching (dir) select 
+            1 on Norte
+            2 on Este
+            3 on Sur
+            4 otherwise)
+}
+
+procedure Aux_SacarRobot() {
+  Aux_SacarTodas(Negro)
+}
+
+procedure Aux_SacarTodas(color) {
+  repeat(nroBolitas(color)) { Sacar(color) }
+}
+
+procedure Aux_PonerRobotAl_(dir) {
+  repeat(aux_codificarDir(dir)) { Poner(Negro) }
+}
+
+
+

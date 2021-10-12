@@ -1,0 +1,88 @@
+program {
+  movimientosEfectivosHastaAhora := []
+  while (not (direcciónDeLaPróximaCruz() == NoHayCruz)) {
+    direcciónAMover := direcciónDeLaPróximaCruz()
+    AvanzarUnPasoHacia(direcciónAMover)
+    movimientosEfectivosHastaAhora := movimientosEfectivosHastaAhora ++ [direcciónAMover]
+  }
+  return(movimientosEfectivosHastaAhora
+       , movimientosTotalesRealizadosParaRecorrer_(movimientosEfectivosHastaAhora)
+       , girosTotalesRealizadosParaRecorrer_(movimientosEfectivosHastaAhora))
+}
+
+function movimientosTotalesRealizadosParaRecorrer_(movimientos) {
+  cantidadDeMovimientosTotalesYaContados := 0
+  foreach movimiento in movimientos {
+    cantidadDeMovimientosTotalesYaContados := 
+        cantidadDeMovimientosTotalesYaContados + 1
+        + movimientosParaDeterminarDirecciónAl_(movimiento)
+  }
+  return(cantidadDeMovimientosTotalesYaContados + movimientosParaDeterminarDirecciónAl_(NoHayCruz))
+}
+
+function girosTotalesRealizadosParaRecorrer_(movimientos) {
+  cantidadDeGirosTotalesYaContados := 0
+  foreach movimiento in movimientos {
+    cantidadDeGirosTotalesYaContados := 
+        cantidadDeGirosTotalesYaContados + girosParaMoverseHacia_(movimiento)
+        + girosParaDeterminarDirecciónAl_(movimiento)
+  }
+  return(cantidadDeGirosTotalesYaContados + girosParaDeterminarDirecciónAl_(NoHayCruz))
+}
+
+function movimientosParaDeterminarDirecciónAl_(dirección) {
+  return(matching (dirección) select
+          2 on Izquierda
+          4 on Adelante
+          6 otherwise)
+}
+
+function girosParaMoverseHacia_(dirección) {
+  return(matching (dirección) select
+          1 on Izquierda
+          1 on Derecha
+          0 otherwise)
+}
+function girosParaDeterminarDirecciónAl_(dirección) {
+  return(matching (dirección) select
+           4 on Izquierda
+           8 on Adelante
+          12 on Derecha
+           0 otherwise)
+}
+
+function direcciónDeLaPróximaCruz() {
+  return (choose Izquierda when (hayCruzHaciaLaIzquierda())
+                 Adelante  when (hayCruzHaciaAdelante())
+                 Derecha   when (hayCruzHaciaLaDerecha())
+                 NoHayCruz otherwise)
+}
+
+function hayCruzHaciaLaIzquierda() {
+  GirarALaIzquierda()
+  AvanzarUnPaso()
+  return (hayCruzEnLaPosiciónActual())
+}
+
+function hayCruzHaciaAdelante() {
+  AvanzarUnPaso()
+  return (hayCruzEnLaPosiciónActual())
+}
+
+function hayCruzHaciaLaDerecha() {
+  GirarALaDerecha()
+  AvanzarUnPaso()
+  return (hayCruzEnLaPosiciónActual())
+}
+
+procedure AvanzarUnPasoHacia(direcciónDeLaCruz) {
+  GirarHacia(direcciónDeLaCruz)
+  AvanzarUnPaso()
+}
+
+procedure GirarHacia(direcciónDeLaCruz) {
+  if     (direcciónDeLaCruz == Izquierda) { GirarALaIzquierda() } 
+  elseif (direcciónDeLaCruz == Derecha)   { GirarALaDerecha()   } 
+  elseif (direcciónDeLaCruz == Adelante)  {                     } 
+  else { BOOM("No puedo girar para apuntar a una cruz que no existe") }
+}
